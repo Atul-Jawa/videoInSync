@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% load static %}
+{% block link %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.css">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+{% endblock link %}
+{% block content %}
+
+<figure id="videoContainer" data-fullscreen="false">
+  <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata" >
+  </video>
+  <div id="video-controls" class="controls" data-state="hidden">
+    <button id="playpause" type="button" data-state="play">Play/Pause</button>
+    <button id="stop" type="button" data-state="stop">Stop</button>
+    <div class="progress">
+      <progress id="progress" value="0" min="0">
+      <span id="progress-bar"></span>
+      </progress>
+    </div>
+    <button id="mute" type="button" data-state="mute">Mute/Unmute</button>
+    <button id="volinc" type="button" data-state="volup">Vol+</button>
+    <button id="voldec" type="button" data-state="voldown">Vol-</button>
+    <button id="fs" type="button" data-state="go-fullscreen">Fullscreen</button>
+    <button id="subtitles" type="button" data-state="subtitles">CC</button>
+    <div id="chat-circle" class="btn btn-raised">
+        <div id="chat-overlay"></div>
+        <i class="material-icons">speaker_phone</i>
+    </div>
+    <div class="chat-box">
+        <div class="chat-box-header">
+        ChatBot
+        <span class="chat-box-toggle"><i class="material-icons">close</i></span>
+        </div>
+        <div class="chat-box-body">
+        <div class="chat-box-overlay">   
+        </div>
+        <div class="chat-logs">
+        </div>
+        <!--chat-log -->
+        </div>
+        <div class="chat-input">
+        <form>
+            <input type="text" id="chat-input" placeholder="Send a message..."/>
+            <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
+        </form>
+        </div>
+    </div>
+  </div>
+  <figcaption>
+    &copy; copyright Blender Foundation | <a href="http://www.sintel.org">www.sintel.org</a>
+  </figcaption>
+</figure>
+<div class="content">
+  <div id="message"></div>
+  <input id="uploadvideo" type="file" accept="video/*" />
+  <input id="uploadsubtitles" type="file">
+  
+  <!--<button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
+    <button id="myBtn" onclick="myFunction()">Play</button>-->
+  
+    
+</div>
+{% endblock content %}
+{% block script %} 
+<script src="{% static 'js/video-player.js' %}"></script>
+<script> 
+  var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/videosyncapp/1/');  
+
+    chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+  var btn = document.getElementById("myBtn");
+      video.addEventListener('loadedmetadata', function() {
+      this.currentTime = 5;
+      }, false);
+  (function localFileVideoPlayer() {
+  	'use strict'
+    var URL = window.URL || window.webkitURL
+    var displayMessage = function (message, isError) {
+      var element = document.querySelector('#message')
+      element.innerHTML = message
+      element.className = isError ? 'error' : 'info'
+    }
+    var playSelectedFile = function (event) {
+      var file = this.files[0]
+      var type = file.type
+      var videoNode = document.querySelector('video')
+      var canPlay = videoNode.canPlayType(type)
+      if (canPlay === '') canPlay = 'no'
+      var message = 'Can play type "' + type + '": ' + canPlay
+      var isError = canPlay === 'no'
+      displayMessage(message, isError)
+  
+      if (isError) {
+        return
+      }
+  
+      var fileURL = URL.createObjectURL(file)
+      //videoNode.src = fileURL
+      videoNode.innerHTML = '<source src="'+ fileURL +'" type="video/mp4">';
+    }
+
+
+
+    var uploadsubtitles = function (event) {
+        var file = this.files[0]
+        var type = file.type
+        var videoNode = $("#video")
+        var fileURL = URL.createObjectURL(file)
+        var subtitlesfile = '<track label="English" kind="subtitles" srclang="en" src="' + fileURL + '" default>';
+        videoNode.append(subtitlesfile);
+        vidply();
+    }
+    var inputNode = document.getElementById('uploadvideo')
+    inputNode.addEventListener('change', playSelectedFile, false)
+    var inputNode = document.getElementById('uploadsubtitles')
+    inputNode.addEventListener('change', uploadsubtitles, false)
+  })()
+  
+  $(function() {
+    var INDEX = 0; 
+    $("#chat-submit").click(function(e) {
+      e.preventDefault();
+      var msg = $("#chat-input").val(); 
+      if(msg.trim() == ''){
+        return false;
+      }
+      chatSocket.send(JSON.stringify({
+          'type':'msg',
+          'message': msg,
+          'user' : '{{user.username}}',
+      }));
+      /*generate_message(msg, 'self');
+      setTimeout(function() {      
+        generate_message(msg, 'user');  
+      }, 1000)*/
+      
+    })
+
+    chatSocket.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        console.log(data);
+        var type = data['type']
+        if(type === "msg"){
+          var msg = data['message'];
+          var user = data['user'];
+          if(user === '{{user.username}}'){
+            generate_message(msg, 'self');
+          }
+          else{
+            generate_message(msg, 'user');
+          }
+        }
+        else if(type === "played" ){
+          console.log("played")
+					video.play();
+        }
+        else if(type === "paused") {
+          console.log("paused")
+          video.pause();
+        }
+        else if(type === "latency") {
+          var user = data['user']
+          if(user == '{{ user.username }}'){
+            chatSocket.send(JSON.stringify({
+                'type':'latency',
+                'user' : '{{user.username}}',
+            }));
+          }
+        }
+    }
+    function generate_message(msg, type) {
+      INDEX++;
+      var str="";
+      str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
+      str += "          <span class=\"msg-avatar\">";
+      str += "            <img src='https://cdn.dribbble.com/users/1041205/screenshots/3636353/dribbble.jpg'>";
+      str += "          <\/span>";
+      str += "          <div class=\"cm-msg-text\">";
+      str += msg;
+      str += "          <\/div>";
+      str += "        <\/div>";
+      $(".chat-logs").append(str);
+      $("#cm-msg-"+INDEX).hide().fadeIn(300);
+      if(type == 'self'){
+       $("#chat-input").val(''); 
+      }    
+      $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);    
+    }  
+  
+    $(document).delegate(".chat-btn", "click", function() {
+      var value = $(this).attr("chat-value");
+      var name = $(this).html();
+      $("#chat-input").attr("disabled", false);
+      generate_message(name, 'self');
+    })
+    
+    $("#chat-circle").click(function() {    
+      $("#chat-circle").toggle('scale');
+      $(".chat-box").toggle('scale');
+    })
+    
+    $(".chat-box-toggle").click(function() {
+      $("#chat-circle").toggle('scale');
+      $(".chat-box").toggle('scale');
+    })
+    
+  })
+  
+</script> 
+{% endblock script %}
