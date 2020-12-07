@@ -47,7 +47,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 {
                     'type': 'chat_message',
                     'user': user,
-                    'message': message
+                    'message': message,
                 }
             )
         elif msgtype == 'played':
@@ -72,6 +72,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             print(self.user.username)
             print(self.latencytime/10**9)
 
+    async def chat_message(self, event):
+        user = event['user']
+        message = event['message']
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'type':"msg",
+            'message': message,
+            'user': user,
+        }))
     # Receive message from room group
     async def paused(self, event):
         user = event['user']
