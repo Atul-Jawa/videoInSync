@@ -23,7 +23,7 @@ SECRET_KEY = '@0tx1x%ti%ap!51*s2fk9p@z-2a^yo!^2j(arq*wr&i+rh93ut'
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ["139.59.56.89", "127.0.0.1"]
+ALLOWED_HOSTS = ["139.59.56.89","videoinsync.ml", "www.videoinsync.ml","127.0.0.1"]
 
 ROOT_URLCONF = f'{config("PROJECT_NAME")}.urls'
 
