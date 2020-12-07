@@ -33,7 +33,7 @@ ASGI_APPLICATION = f'{config("PROJECT_NAME")}.routing.application'
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@0tx1x%ti%ap!51*s2fk9p@z-2a^yo!^2j(arq*wr&i+rh93ut'
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
