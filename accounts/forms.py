@@ -14,7 +14,10 @@ class LoginForm(forms.Form):
             attrs={
                 'id': 'your_name',
                 'placeholder': 'Your Name',
-                'name': 'your_name'
+                'name': 'your_name',
+                'class': "form-control", 
+                'name':"name", 
+                'id':"name"
             }
         )
     )
@@ -24,6 +27,7 @@ class LoginForm(forms.Form):
             attrs={
                 'id': 'your_pass',
                 'placeholder': 'Password',
+                'class': "form-control",
                 'name': 'your_pass'
             }
         )
@@ -59,10 +63,10 @@ class CustomUserCreationForm(UserCreationForm, forms.ModelForm):
         fields = ('username', 'email', "password1", "password2", 'image')
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm,self).__init__(*args,**kwargs)
-        self.fields['username'].widget.attrs.update({'id': 'your_name', 'placeholder': 'Your Name', 'name': 'your_name'})
-        self.fields['email'].widget.attrs.update({'id': 'email', 'placeholder': 'Your Email', 'name': 'email'})
-        self.fields['password1'].widget.attrs.update({'id': 'your_pass', 'placeholder': 'Password', 'name': 'your_pass'})
-        self.fields['password2'].widget.attrs.update({'id': 'your_pass2', 'placeholder': 'Repeat your Password', 'name': 'your_pass'})
+        self.fields['username'].widget.attrs.update({'id': 'your_name', 'class': "form-control",  'placeholder': 'Your Name', 'name': 'your_name'})
+        self.fields['email'].widget.attrs.update({'id': 'email', 'class': "form-control",  'placeholder': 'Your Email', 'name': 'email'})
+        self.fields['password1'].widget.attrs.update({'id': 'your_pass', 'class': "form-control",  'placeholder': 'Password', 'name': 'your_pass'})
+        self.fields['password2'].widget.attrs.update({'id': 'your_pass2', 'class': "form-control", 'placeholder': 'Repeat your Password', 'name': 'your_pass'})
         self.fields['image'].widget.attrs.update({'class': 'form-control form-control-line', 'style':"display: none;"})
     def clean_password2(self):
         # Check that the two password entries match

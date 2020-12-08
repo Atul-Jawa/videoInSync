@@ -20,11 +20,11 @@ def CustomSignUpView(request):
             messages.success(request, "You are logged in successfully!!! ")
             return redirect('/')
         else:
-            return render(request, 'account.html', {'page':'index', 'include': 'signup.html', 'form': form})
+            return render(request, 'account.html', {'page':'register', 'include': 'signup.html', 'form': form})
     else:
         form = CustomUserCreationForm()
         print(form)
-        return render(request, 'account.html', {'page':'index', 'include': 'signup.html', 'form': form})
+        return render(request, 'account.html', {'page':'register', 'include': 'signup.html', 'form': form})
 
 def CustomLoginView(request):
     if request.user.is_authenticated:
@@ -38,11 +38,11 @@ def CustomLoginView(request):
                 messages.success(request, "You are logged in successfully!!! ")
                 return redirect('/')
             else:
-                return render(request, 'account.html', {'page':'index', 'include': 'signin.html', 'form': form})
+                return render(request, 'account.html', {'page':'login', 'include': 'signin.html', 'form': form})
         else:
-            return render(request, 'account.html', {'page':'index', 'include': 'signin.html', 'form': form})
+            return render(request, 'account.html', {'page':'login', 'include': 'signin.html', 'form': form})
     form = LoginForm()
-    return render(request, 'account.html', {'page':'index', 'include': 'signin.html', 'form':form })
+    return render(request, 'account.html', {'page':'login', 'include': 'signin.html', 'form':form })
 
 
 def signout(request):

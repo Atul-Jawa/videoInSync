@@ -1,11 +1,48 @@
-{% extends "base.html" %}
 {% load static %}
 {% block link %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.css">
 <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 {% endblock link %}
 {% block content %}
-
+  <div class="navigation-wrap start-header start-style">
+      <div class="row">
+        <div class="col-12">
+          <nav class="navbar navbar-expand-md navbar-light">
+          
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto p-2">
+              <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"><a class="nav-link" href="{% url 'index' %}#body">Home</a></li>
+              <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" ><a class="nav-link" href="{% url 'index' %}#about">Let's Start</a></li>
+              <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" ><a class="nav-link" href="{% url 'index' %}#services">About Us</a></li>
+              <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" ><a class="nav-link" href="{% url 'index' %}#our-team">Team</a></li>
+              <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" ><a class="nav-link" href="{% url 'index' %}#contact-us">Contact</a></li>
+              <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" >
+                  <a href="#">   </a>
+              </li>
+              {% if user.is_authenticated %}
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"><a class="nav-link" href="{% url 'login' %}">Create</a></li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"><a class="nav-link" href="{% url 'login' %}">Join</a></li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" ><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                
+              {% else %}
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"><a class="nav-link" href="{% url 'signup' %}">Register</a></li>
+              {% endif %}
+              </ul>
+            </div>
+            
+          </nav>    
+        </div>
+      </div>
+  </div>
 <figure id="videoContainer" data-fullscreen="false">
   <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata" >
   </video>
@@ -46,9 +83,6 @@
         </div>
     </div>
   </div>
-  <figcaption>
-    &copy; copyright Blender Foundation | <a href="http://www.sintel.org">www.sintel.org</a>
-  </figcaption>
 </figure>
 <div class="content">
   <div id="message"></div>
@@ -62,13 +96,16 @@
 </div>
 {% endblock content %}
 {% block script %} 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="{% static 'js/video-player.js' %}"></script>
 <script> 
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-	var ws_path = ws_scheme + '://' + window.location.host + ":8001/ws/videosyncapp/1/"; // PRODUCTION
-	//var ws_path = ws_scheme + '://' + window.location.host + "";
-	// console.log("Connecting to " + ws_path);
-	var chatSocket = new WebSocket(ws_path);
+  var ws_path = ws_scheme + '://' + window.location.host + ":8001/ws/videosyncapp/1/"; // PRODUCTION
+  //var ws_path = ws_scheme + '://' + window.location.host + "";
+  // console.log("Connecting to " + ws_path);
+  var chatSocket = new WebSocket(ws_path);
   /*var chatSocket = new WebSocket(
         'ws://' + window.location.host +
         '/ws/videosyncapp/1/');  */

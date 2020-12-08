@@ -6,10 +6,3 @@ def index(request):
 
 def watchtogether(request):
     return render(request, 'watchtogether.html', {'page':'contactus'})
-
-
-def contact(request):
-    return render(request, 'contactus.html', {'page':'contactus'})
-
-def aboutus(request):
-    return render(request, 'aboutus.html', {'page':'aboutus'})

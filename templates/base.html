@@ -1,151 +1,199 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
-<head>
-    <title>The Recommender</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" id="bootstrap-css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
-    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+<html class="no-js">
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="description" content="VideoInSync by Atul">
+        
+        <meta name="author" content="Muhammad Morshed">
+		
+        <title>VideoInSync | by Atul</title>
+		
+		<!-- Mobile Specific Meta
+		================================================== -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- Favicon -->
+		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.png' %}" />
+		
+		<!-- CSS
+		================================================== -->
+		<!-- Fontawesome Icon font -->
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+		<!-- bootstrap.min css -->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+		<!-- Animate.css -->
+        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+		<!-- Owl Carousel -->
+        <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+		<!-- Grid Component css -->
+        <link rel="stylesheet" href="{% static 'css/component.css' %}">
+		<!-- Main Stylesheet -->
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+		<!-- Media Queries -->
+        <link rel="stylesheet" href="{% static 'css/media-queries.css' %}">
+
+		<!--
+		Google Font
+		=========================== -->                    
+		
+		<!-- Oswald / Title Font -->
+		<link href='http://fonts.googleapis.com/css?family=Oswald:400,300' rel='stylesheet' type='text/css'>
+		<!-- Ubuntu / Body Font -->
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300' rel='stylesheet' type='text/css'>
+		
+		<!-- Modernizer Script for old Browsers -->		
+    <script src="{% static 'js/modernizr-2.6.2.min.js' %}"></script>
 
 
-    {% block link %} {% endblock link %}
-    {% block style %} {% endblock style %}
+    {% block links %}{% endblock links %}
+		
+    </head>
+	
+    <body id="body">
+	    <!--
+	    Start Preloader
+	    ==================================== -->
+		<div id="loading-mask">
+			<div class="loading-img">
+				<img alt="Meghna Preloader" src="{% static 'img/preloader.gif' %}"  />
+			</div>
+		</div>
 
-</head>
+    {% block slider %}{% endblock slider %}
 
-<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300" class='smooth-scroll scrollbar scrollbar-black bordered-black square thin'>
-  {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{message.tags}}{% endif %} alert-dismissible fade show mb-0" role="alert">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          {{message}}
-        </div>
-      {% endfor %}
-    {% endif %}  
-  <div class="wrapper d-flex align-items-stretch">
-      
-      <div id="content" class="">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="container-fluid">
-            <button type="button" id="sidebarCollapse" class="btn btn-primary">
-            <i class="fa fa-bars"></i>
-            <span class="sr-only">Toggle Menu</span>
-            </button>
-            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fa fa-bars"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'index' %}">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">About</a>
-                </li>
-                {% if user.is_authenticated %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                  </li>
-                  <li>
-                    <a class="nav-link text-warning" href="#">Hii {{ user.username }}..</a>
-                  </li>
-                {% else %}
-                
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'signup' %}">SignUp</a>
-                </li>
-                {% endif %}
+        <!--
+        End Preloader-->      
+        <!--Fixed Navigation
+        ==================================== -->
+        <header id="navigation" class="navbar navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <!-- responsive nav button -->
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+					<!-- /responsive nav button -->
+					
+					<!-- logo -->
+                    <a class="navbar-brand" href="#body">
+						<h1 id="logo">
+							<img src="{% static 'img/logo-meghna.png' %}" alt="Meghna" />
+						</h1>
+					</a>
+					<!-- /logo -->
+                </div>
 
-
-                <li class="nav-item dropdown">
-                  <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-bell"></i>
-                  </a>
-                    <ul class="dropdown-menu">
-                      <li class="head text-light bg-dark">
-                        <div class="row">
-                          <div class="col-lg-12 col-sm-12 col-12">
-                            <span>Notifications (3)</span>
-                            <a href="" class="float-right text-light">Mark all as read</a>
-                          </div>
-                      </li>
-                      <li class="notification-box">
-                        <div class="row">
-                          <div class="col-lg-3 col-sm-3 col-3 text-center">
-                            <img src="{% static 'images/logo.jpg' %}" class="w-50 rounded-circle">
-                          </div>    
-                          <div class="col-lg-8 col-sm-8 col-8">
-                            <strong class="text-info">David John</strong>
-                            <div>
-                              Lorem ipsum dolor sit amet, consectetur
-                            </div>
-                            <small class="text-warning">27.11.2015, 15:00</small>
-                          </div>    
-                        </div>
-                      </li>
-                      <li class="notification-box bg-gray">
-                        <div class="row">
-                          <div class="col-lg-3 col-sm-3 col-3 text-center">
-                            <img src="{% static 'images/logo.jpg' %}" class="w-50 rounded-circle">
-                          </div>    
-                          <div class="col-lg-8 col-sm-8 col-8">
-                            <strong class="text-info">David John</strong>
-                            <div>
-                              Lorem ipsum dolor sit amet, consectetur
-                            </div>
-                            <small class="text-warning">27.11.2015, 15:00</small>
-                          </div>    
-                        </div>
-                      </li>
-                      <li class="notification-box">
-                        <div class="row">
-                          <div class="col-lg-3 col-sm-3 col-3 text-center">
-                            <img src="{% static 'images/logo.jpg' %}" class="w-50 rounded-circle">
-                          </div>    
-                          <div class="col-lg-8 col-sm-8 col-8">
-                            <strong class="text-info">David John</strong>
-                            <div>
-                              Lorem ipsum dolor sit amet, consectetur
-                            </div>
-                            <small class="text-warning">27.11.2015, 15:00</small>
-                          </div>    
-                        </div>
-                      </li>
-                      <li class="footer bg-dark text-center">
-                        <a href="" class="text-light">View All</a>
-                      </li>
+				<!-- main nav -->
+                <nav class="collapse navbar-collapse navbar-right" role="Navigation">
+                    <ul id="nav" class="nav navbar-nav">
+                        <li {% ifequal page "index" %} class = "current" {% endifequal %}><a href="{% ifnotequal page "index" %}{% url 'index' %}{% endifnotequal %}#body">Home</a></li>
+                        <li><a href="{% ifnotequal page "index" %}{% url 'index' %}{% endifnotequal %}#about">Let's Start</a></li>
+                        <li><a href="{% ifnotequal page "index" %}{% url 'index' %}{% endifnotequal %}#services">About Us</a></li>
+                        <li><a href="{% ifnotequal page "index" %}{% url 'index' %}{% endifnotequal %}#our-team">Team</a></li>
+                        <li><a href="{% ifnotequal page "index" %}{% url 'index' %}{% endifnotequal %}#contact-us">Contact</a></li>
+                        <li>
+                            <a href="#">   </a>
+                        </li>
+                        {% if user.is_authenticated %}
+                          <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'login' %}">Create</a></li>
+                          <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'login' %}">Join</a></li>
+                          <li><a href="{% url 'logout' %}">Logout</a></li>
+                          
+                        {% else %}
+                          <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'login' %}">Login</a></li>
+                          <li {% ifequal page "register" %} class = "current" {% endifequal %}><a href="{% url 'signup' %}">Register</a></li>
+                        {% endif %}
                     </ul>
-                </li>
-
-
-              </ul>
+                </nav>
+				<!-- /main nav -->
+				
             </div>
-          </div>
-        </nav>
+        </header>
+        <!--
+        End Fixed Navigation
+        ==================================== -->
+    {% block content %}{% endblock content %}
+		
+		<footer id="footer" class="bg-one">
+			<div class="container">
+			    <div class="row wow fadeInUp" data-wow-duration="500ms">
+					<div class="col-lg-12">
+						
+						<!-- Footer Social Links -->
+						<div class="social-icon">
+							<ul>
+								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+								<li><a href="#"><i class="fa fa-youtube"></i></a></li>
+								<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+								<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+								<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+							</ul>
+						</div>
+						<!--/. End Footer Social Links -->
 
-
-        {% block content %} {% endblock content %}
-
-       </div>
-    
-    </div>
-</body>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="{% static 'js/main.js' %}"></script>
-<script src="{% static 'js/chatbot.js' %}"></script>
-
-
-{% block script %} {% endblock script %}
-
+						<!-- copyright -->
+						<div class="copyright text-center">
+							<a href="index.html">
+								<img src="{% static 'img/logo-meghna.png' %}" alt="Meghna" /> 
+							</a>
+							<br />
+							
+							<p>Design And Developed by <a href=""> Atul Jawa </a>. Copyright &copy; 2021. All Rights Reserved.</p>
+						</div>
+						<!-- /copyright -->
+						
+					</div> <!-- end col lg 12 -->
+				</div> <!-- end row -->
+			</div> <!-- end container -->
+		</footer> <!-- end footer -->
+		
+		<!-- Back to Top
+		============================== -->
+		<a href="javascript:;" id="scrollUp">
+			<i class="fa fa-angle-up fa-2x"></i>
+		</a>
+		
+		<!-- end Footer Area
+		========================================== -->
+		
+		<!-- 
+		Essential Scripts
+		=====================================-->
+		
+		<!-- Main jQuery -->
+		<script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
+		<!-- Bootstrap 3.1 -->
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'js/jquery.ba-cond.min.js' %}"></script>
+		<!-- Parallax -->
+		<script src="{% static 'js/jquery.parallax-1.1.3.js' %}"></script>
+		<!-- Custom Scrollbar -->
+		<script src="{% static 'js/jquery.nicescroll.min.js' %}"></script>
+		<!-- Jappear js -->
+		<script src="{% static 'js/jquery.appear.js' %}"></script>
+		<!-- jQuery Easing -->
+		<script src="{% static 'js/jquery.easing-1.3.pack.js' %}"></script>
+		<!-- Highlight menu item -->
+		<script src="{% static 'js/jquery.nav.js' %}"></script>
+		<!-- Sticky Nav -->
+		<script src="{% static 'js/jquery.sticky.js' %}"></script>
+		<!-- Number Counter Script -->
+		<script src="{% static 'js/jquery.countTo.js' %}"></script>
+		<!-- wow.min Script -->
+		<script src="{% static 'js/wow.min.js' %}"></script>
+		<!-- For video responsive -->
+		<script src="{% static 'js/jquery.fitvids.js' %}"></script>
+		<!-- Grid js -->
+		<script src="{% static 'js/grid.js' %}"></script>
+		
+    {% block script %}{% endblock script %}
+    <!-- Custom js -->
+		<script src="{% static 'js/custom.js' %}"></script>
+    </body>
 </html>
