@@ -4,6 +4,35 @@
 {% block links %} 
         <!-- Slit Slider css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/slit-slider.css' %}">
+		<style>
+		#home .bg-img-1 {
+			background-image: url('{% static "img/slides/1.jpg" %}');
+		}
+		#home .bg-img-2 {
+			background-image: url('{% static "img/slides/2.jpg" %}');
+		}
+		#home .bg-img-3 {
+			background-image: url('{% static "img/slides/3.jpg" %}');
+		}
+		#counter {
+			background-image: url('{% static "img/parallax/city.jpg" %}');
+			padding: 70px 0;
+		}
+		#team-skills {
+			padding: 70px 0;
+			background-image: url('{% static "img/parallax/skills.jpg" %}');
+		}
+		
+		#twitter-feed {
+			background-image: url('{% static "img/parallax/twitter.jpg" %}');
+			padding-bottom: 100px;
+			padding-top: 80px;
+		}
+		#testimonial {
+			background-image: url('{% static "img/parallax/bicycle.jpg" %}');
+			padding: 70px 0;
+		}
+		</style>
 {% endblock links %}
 {% block slider %} 
 		<section id="home">	    
