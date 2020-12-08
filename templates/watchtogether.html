@@ -5,6 +5,57 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.css">
 <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+<style>
+/* message */
+.msg {
+  position: fixed;
+  top: 110px;
+  left: 50%;
+  padding: 10px 20px;
+  z-index:100;
+  border-radius: 5px;
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.05);
+}
+
+.msg-success {
+  background-color: #28a745;
+}
+
+.msg-warning {
+  color: #6d5200;
+  background-color: #ffc107;
+}
+
+.msg-danger {
+  background-color: #dc3545;
+}
+
+.msg-info {
+  background-color: #17a2b8;
+}
+
+/*fade*/
+.animate {
+  opacity: 0;
+  transition: all 1s;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.animate.active {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.slide-in-down {
+  transform: translateY(-100%) translateX(-50%);
+}
+</style>
 {% endblock link %}
 {% block content %}
   <div class="navigation-wrap start-header start-style">
@@ -43,6 +94,7 @@
         </div>
       </div>
   </div>
+
 <figure id="videoContainer" data-fullscreen="false">
   <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata" >
   </video>
@@ -63,6 +115,7 @@
         <div id="chat-overlay"></div>
         <i class="material-icons">speaker_phone</i>
     </div>
+    
     <div class="chat-box">
         <div class="chat-box-header">
         ChatBot
@@ -82,7 +135,10 @@
         </form>
         </div>
     </div>
+  
+
   </div>
+  <div class="msg animate slide-in-down"></div>
 </figure>
 <div class="content">
   <div id="message"></div>
@@ -101,7 +157,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="{% static 'js/video-player.js' %}"></script>
 <script> 
-  var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
   var ws_path = ws_scheme + '://' + window.location.host + ":8001/ws/videosyncapp/1/"; // PRODUCTION
   //var ws_path = ws_scheme + '://' + window.location.host + "";
   // console.log("Connecting to " + ws_path);
@@ -110,14 +166,63 @@
         'ws://' + window.location.host +
         '/ws/videosyncapp/1/');  */
 
-    chatSocket.onclose = function (e) {
-        console.error('Chat socket closed unexpectedly');
-    };
 
 
+var render; 
 
+(function(){
 
+    // data
+    var clear;
+    var msgDuration = 2000; // 2 seconds
+    // cache DOM
+    var $msg        = $('.msg');
+    /*var $btnSuccess = $('.btn-success');
+    var $btnDanger  = $('.btn-danger');
+    var $btnWarning = $('.btn-warning');
+    var $btnInfo    = $('.btn-info');*/
 
+    // render message
+    render = function(type, message="Great"){
+
+        hide();
+
+        switch (type) {
+            case 'success':
+                $msg.addClass('msg-success active').text(message);
+                //alert("success")
+                break;
+            case 'danger':
+                $msg.addClass('msg-danger active').text(message);
+                break;
+            case 'warning':
+                $msg.addClass('msg-warning active').text(message);
+                break;
+            case 'info':
+                $msg.addClass('msg-info active').text(message);
+                break;
+        }
+    }
+
+    function timer(){
+        clearTimeout(clear);
+        clear = setTimeout(function(){
+            hide();
+        }, msgDuration)
+    }
+
+    function hide(){
+        $msg.removeClass('msg-success msg-danger msg-warning msg-info active');
+    }
+
+    // bind events
+    /*$btnSuccess.on('click', function(){render('success');});
+    $btnDanger .on('click', function(){render('danger');});
+    $btnWarning.on('click', function(){render('warning');});
+    $btnInfo   .on('click', function(){render('info');});*/
+    $msg       .on('transitionend', timer);
+
+})();
 
 
 
@@ -197,6 +302,7 @@
         var data = JSON.parse(e.data);
         console.log(data);
         var type = data['type']
+        var user = data['user']
         if(type === "msg"){
           var msg = data['message'];
           var user = data['user'];
@@ -204,16 +310,26 @@
             generate_message(msg, 'self');
           }
           else{
-            generate_message(msg, 'user');
+            generate_message(msg, 'user', user);
+            render('warning',user + " sent a message :)");
           }
+        }
+        else if(type === "changedtime" ){
+          console.log("changedtime")
+					video.play();
+          var videotime = data['videotime']
+          video.currentTime = videotime;
+          render('info',user + " changed Video playing time :( to " + videotime );
         }
         else if(type === "played" ){
           console.log("played")
 					video.play();
+          render('info',user + " Played the Video :)");
         }
         else if(type === "paused") {
           console.log("paused")
           video.pause();
+          render('info',user + " Paused the Video :(");
         }
         else if(type === "latency") {
           var user = data['user']
@@ -223,16 +339,25 @@
                 'user' : '{{user.username}}',
             }));
           }
+          render('success',user + " joined :)");
+        }
+        else if(type === "leftgroup") {
+          var user = data['user']
+          render('danger',user + " left :(");
         }
     }
-    function generate_message(msg, type) {
+    function generate_message(msg, type, username="") {
       INDEX++;
       var str="";
       str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
       str += "          <span class=\"msg-avatar\">";
       str += "            <img src='https://cdn.dribbble.com/users/1041205/screenshots/3636353/dribbble.jpg'>";
       str += "          <\/span>";
+      str += "          <div style='color:#FFF'>";
+      str += username;
+      str += "          <\/div>";
       str += "          <div class=\"cm-msg-text\">";
+
       str += msg;
       str += "          <\/div>";
       str += "        <\/div>";

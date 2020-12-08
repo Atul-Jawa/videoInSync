@@ -27,6 +27,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group
+        await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'leftgroup',
+                    'user': self.user.username,
+                }
+            )
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -36,7 +43,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         msgtype = text_data_json['type']
-        user = text_data_json['user']
         if(msgtype == 'msg'):
             message = text_data_json['message']
             print(text_data_json)
@@ -46,8 +52,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'chat_message',
-                    'user': user,
+                    'user': self.user.username,
                     'message': message,
+                }
+            )
+        elif msgtype == 'changedtime':
+            videotime = text_data_json['videotime']
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'changedtime',
+                    'user': self.user.username,
+                    'videotime': videotime
                 }
             )
         elif msgtype == 'played':
@@ -55,7 +71,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'played',
-                    'user': user,
+                    'user': self.user.username,
                 }
             )
         elif msgtype == 'paused':
@@ -63,7 +79,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'paused',
-                    'user': user,
+                    'user': self.user.username,
                 }
             )
         elif msgtype == 'latency':
@@ -79,6 +95,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type':"msg",
             'message': message,
+            'user': user,
+        }))
+    async def changedtime(self, event):
+        user = event['user']
+        videotime = event['videotime']
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'type':"changedtime",
+            'user': user,
+            'videotime':videotime
+        }))
+    async def leftgroup(self, event):
+        user = event['user']
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'type':"leftgroup",
             'user': user,
         }))
     # Receive message from room group

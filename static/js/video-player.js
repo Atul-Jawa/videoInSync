@@ -1,4 +1,4 @@
-var vidply
+var vidply;
 (function () {
 	'use strict';
 
@@ -240,6 +240,10 @@ var vidply
 			video.addEventListener('timeupdate', function() {
 				// For mobile browsers, ensure that the progress element's max attribute is set
 				if (!progress.getAttribute('max')) progress.setAttribute('max', video.duration);
+				// chatSocket.send(JSON.stringify({
+				// 	'type':'changedtime',
+				// 	'videotime' : video.currentTime
+				// }));
 				progress.value = video.currentTime;
 				progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
 			});
@@ -248,6 +252,10 @@ var vidply
 			progress.addEventListener('click', function(e) {
 				// Also need to take the parents into account here as .controls and figure now have position:relative
 				var pos = (e.pageX  - (this.offsetLeft + this.offsetParent.offsetLeft + this.offsetParent.offsetParent.offsetLeft)) / this.offsetWidth;
+				chatSocket.send(JSON.stringify({
+					'type':'changedtime',
+					'videotime' : pos * video.duration
+				}));
 				video.currentTime = pos * video.duration;
 			});
 
