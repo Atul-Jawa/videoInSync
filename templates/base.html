@@ -100,7 +100,7 @@
                         </li>
                         {% if user.is_authenticated %}
                           <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'login' %}">Create</a></li>
-                          <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'login' %}">Join</a></li>
+                          <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'watchtogether' %}">Join</a></li>
                           <li><a href="{% url 'logout' %}">Logout</a></li>
                           
                         {% else %}
