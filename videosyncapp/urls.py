@@ -3,5 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('watchtogether/', views.watchtogether, name='watchtogether'),
+    path('creategrp/', views.creategrp, name='creategrp'),
+    path('joingrp/', views.joingrp, name='joingrp'),
+    re_path(r'watchtogether/(?P<pk>\d+)/$', views.watchtogether, name='watchtogether')
 ]

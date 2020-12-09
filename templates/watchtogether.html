@@ -79,8 +79,8 @@
                   <a href="#">   </a>
               </li>
               {% if user.is_authenticated %}
-                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"><a class="nav-link" href="{% url 'login' %}">Create</a></li>
-                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"><a class="nav-link" href="{% url 'login' %}">Join</a></li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"><a class="nav-link" href="{% url 'creategrp' %}">Create</a></li>
+                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4"><a class="nav-link" href="{% url 'joingrp' %}">Join</a></li>
                 <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" ><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
                 
               {% else %}
@@ -144,7 +144,7 @@
   <div id="message"></div>
   <input id="uploadvideo" type="file" accept="video/*" />
   <input id="uploadsubtitles" type="file">
-  
+  <span class="bg-success p-2 text-white">Code to join Group: <span class="font-weight-bold text-white">{{ grpcode }}</span></span>
   <!--<button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
     <button id="myBtn" onclick="myFunction()">Play</button>-->
   
@@ -157,15 +157,14 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="{% static 'js/video-player.js' %}"></script>
 <script> 
-   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-  var ws_path = ws_scheme + '://' + window.location.host + ":8001/ws/videosyncapp/1/"; // PRODUCTION
-  //var ws_path = ws_scheme + '://' + window.location.host + "";
-  // console.log("Connecting to " + ws_path);
-  var chatSocket = new WebSocket(ws_path);
-  /*var chatSocket = new WebSocket(
+  var chatSocket = new WebSocket(
         'ws://' + window.location.host +
-        '/ws/videosyncapp/1/');  */
+        '/ws/videosyncapp/' + {{ grpcode }} + '/');  
 
+    chatSocket.onclose = function (e) {
+       render('danger',user + " Left :(");
+        console.error('Chat socket closed unexpectedly');
+    };
 
 
 var render; 

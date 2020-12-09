@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section id="contact-us">
+    <div class="container" style="margin-bottom: 50px !important;">
+        <div class="row">
+            
+            <!-- section title -->
+            <div class="title text-center wow fadeIn" data-wow-duration="500ms">
+                <h2>Create <span class="color">Group</span></h2>
+                <div class="border"></div>
+            </div>
+            <!-- /section title -->
+            <div class="container "> 
+                <div class="row">
+                    <!-- Contact Details -->
+                    <div class="col-md-5 text-center signup-image wow fadeInUp" data-wow-duration="500ms">
+                        <figure><img src="{% static 'img/signup-image.jpg' %}" alt="sing up image"></figure>
+                        <a href="{% url 'creategrp' %}" class="signup-image-link">Create A Group</a>
+                    </div>
+                    <!-- / End Contact Details -->
+                        
+                    <!-- Contact Form -->
+                    <div class="contact-form col-md-6 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="300ms">
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label class="text-black" for="title">Group Code</label> 
+                                <input type="number" name="group_name" maxlength="100" id="groupcode" class="form-control" required=""> 
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div id="cf-submit" class="col-md-12">
+                                <button onclick="myFunction();" value="Join" id="contact-submit" class="btn btn-transparent" class="btn btn-primary btn-md text-white">Join</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./End Contact Form -->
+                </div>
+            </div>
+        </div> <!-- end row -->
+    </div> <!-- end container -->		
+{% endblock content %}
+
+{% block script %} 
+<script>
+function myFunction() {
+  var groupcode = document.getElementById("groupcode").value
+  var link = "https://" + window.location.host + '/watchtogether/' + groupcode + '/';
+  window.location.href = link;
+}
+</script>
+{% endblock script %}

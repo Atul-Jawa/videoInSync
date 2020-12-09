@@ -59,7 +59,14 @@
 				<img alt="Meghna Preloader" src="{% static 'img/preloader.gif' %}"  />
 			</div>
 		</div>
-
+	  {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{message.tags}}{% endif %} alert-dismissible fade show mb-0" role="alert">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{message}}
+        </div>
+      {% endfor %}
+    {% endif %} 
     {% block slider %}{% endblock slider %}
 
         <!--
@@ -99,8 +106,8 @@
                             <a href="#">   </a>
                         </li>
                         {% if user.is_authenticated %}
-                          <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'login' %}">Create</a></li>
-                          <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'watchtogether' %}">Join</a></li>
+                          <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'creategrp' %}">Create</a></li>
+                          <li {% ifequal page "login" %} class = "current" {% endifequal %}><a href="{% url 'joingrp' %}">Join</a></li>
                           <li><a href="{% url 'logout' %}">Logout</a></li>
                           
                         {% else %}
