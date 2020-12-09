@@ -142,9 +142,17 @@
 </figure>
 <div class="content">
   <div id="message"></div>
-  <input id="uploadvideo" type="file" accept="video/*" />
-  <input id="uploadsubtitles" type="file">
-  <span class="bg-success p-2 text-white">Code to join Group: <span class="font-weight-bold text-white">{{ grpcode }}</span></span>
+   <div class="row">
+    <div class="col-4">
+      <button style="display:block;" onclick="document.getElementById('uploadvideo').click()">Select Video</button>
+      <input id="uploadvideo" type="file" accept="video/*" style="display:none"/>
+    </div>
+    <div class="col-4">
+      <button style="display:block;" onclick="document.getElementById('uploadsubtitles').click()">Select subtitles (.vvt)</button>
+      <input id="uploadsubtitles" type="file" style="display:none">
+    </div>
+    <span class="bg-success p-2 text-white">Code to join Group: <span class="font-weight-bold text-white">{{ grpcode }}</span></span>
+  </div>
   <!--<button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
     <button id="myBtn" onclick="myFunction()">Play</button>-->
   
