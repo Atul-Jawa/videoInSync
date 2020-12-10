@@ -95,7 +95,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'user': self.user.username,
                 }
             )
-
+    async def chat_message(self, event):
+        user = event['user']
+        message = event['message']
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'type':"Selectedvideo",
+            'message': message,
+            'user': user,
+        }))
     async def Selectedvideo(self, event):
         user = event['user']
         # Send message to WebSocket
