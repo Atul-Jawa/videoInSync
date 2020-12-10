@@ -1,5 +1,4 @@
 {% load static %}
-{% load to_and %}
 {% block link %}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
@@ -55,42 +54,6 @@
 
 .slide-in-down {
   transform: translateY(-100%) translateX(-50%);
-}
-.controls button[data-state="play"] {
-  {% static "img/logos/playbutton.png" as playUrl %}
-  background-image: url('{{ playUrl|to_and }}');
-}
-.controls button[data-state="pause"] {
-  {% static "img/logos/pausebutton.png" as pauseUrl %}
-  background-image: url('{{ pauseUrl|to_and }}');
-}
-.controls button[data-state="stop"] {
-  {% static "img/logos/stopbutton.png" as stopUrl %}
-  background-image: url('{{ stopUrl|to_and }}');
-}
-.controls button[data-state="mute"] {
-  {% static "img/logos/unmuteicon.png" as unmuteUrl %}
-  background-image: url('{{ unmuteUrl|to_and }}');
-}
-.controls button[data-state="unmute"] {
-  {% static "img/logos/muteicon.png" as muteUrl %}
-  background-image: url('{{ muteUrl|to_and }}');
-}
-.controls button[data-state="volup"] {
-  {% static "img/logos/volupicon.png" as volupUrl %}
-  background-image: url('{{ volupUrl|to_and }}');
-}
-.controls button[data-state="voldown"] {
-  {% static "img/logos/voldown.png" as voldownUrl %}
-  background-image: url('{{ voldownUrl|to_and }}');
-}
-.controls button[data-state="go-fullscreen"] {
-  {% static "img/logos/fullscreen.png" as fullscreenUrl %}
-  background-image: url('{{ fullscreenUrl|to_and }}');
-}
-.controls button[data-state="cancel-fullscreen"] {
-  {% static "img/logos/fullscreenexit.png" as fullscreenexitUrl %}
-  background-image: url('{{ fullscreenexitUrl|to_and }}');
 }
 </style>
 {% endblock link %}
@@ -439,5 +402,79 @@ var render;
     
   })
   
+
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  {% static "img/logos/playbutton.png" as playUrl %}
+  var playurl =  "{{ playUrl }}";
+  playurl = makeurl(playurl);
+
+  var stylehtml = '.controls button[data-state="play"] { background-image:';
+  stylehtml += playurl
+  stylehtml += '; }'; 
+
+  /*$(".controls button[data-state='play']").css("background-image",playurl);*/
+
+  {% static "img/logos/pausebutton.png" as pauseUrl %}
+  var pauseUrl =  "{{ pauseUrl }}";
+  pauseUrl = makeurl(pauseUrl)
+  
+  stylehtml += '.controls button[data-state="pause"] { background-image:';
+  stylehtml += pauseUrl
+  stylehtml += '; }';
+  
+  {% static "img/logos/stopbutton.png" as stopUrl %}
+  var stopUrl =  "{{ stopUrl }}";
+  stopUrl = makeurl(stopUrl)
+  stylehtml += '.controls button[data-state="stop"] { background-image:';
+  stylehtml += stopUrl
+  stylehtml += '; }';
+
+  {% static "img/logos/volupicon.png" as volupUrl %}
+  var volupUrl =  "{{ volupUrl }}";
+  volupUrl = makeurl(volupUrl)
+  stylehtml += '.controls button[data-state="volup"] { background-image:';
+  stylehtml += volupUrl
+  stylehtml += '; }';
+
+  {% static "img/logos/voldown.png" as voldown %}
+  var voldown =  "{{ voldown }}";
+  voldown = makeurl(voldown)
+  stylehtml += '.controls button[data-state="voldown"] { background-image:';
+  stylehtml += voldown
+  stylehtml += '; }';
+
+  {% static "img/logos/unmuteicon.png" as unmuteUrl %}
+  var unmuteUrl =  "{{ unmuteUrl }}";
+  unmuteUrl = makeurl(unmuteUrl)
+  stylehtml += '.controls button[data-state="mute"] { background-image:';
+  stylehtml += unmuteUrl
+  stylehtml += '; }';
+
+  {% static "img/logos/muteicon.png" as muteUrl %}
+  var muteUrl =  "{{ muteUrl }}";
+  muteUrl = makeurl(muteUrl)
+  stylehtml += '.controls button[data-state="unmute"] { background-image:';
+  stylehtml += muteUrl
+  stylehtml += '; }';
+
+  {% static "img/logos/fullscreen.png" as fullscreenUrl %}
+  var fullscreenUrl =  "{{ fullscreenUrl }}";
+  fullscreenUrl = makeurl(fullscreenUrl)
+  stylehtml += '.controls button[data-state="go-fullscreen"] { background-image:';
+  stylehtml += fullscreenUrl
+  stylehtml += '; }';
+
+  {% static "img/logos/fullscreenexit.png" as fullscreenexitUrl %}
+  var fullscreenexitUrl =  "{{ fullscreenexitUrl }}";
+  fullscreenexitUrl = makeurl(fullscreenexitUrl)
+  stylehtml += '.controls button[data-state="cancel-fullscreen"] { background-image:';
+  stylehtml += fullscreenexitUrl
+  stylehtml += '; }';
+
+  style.innerHTML = stylehtml;
+  document.getElementsByTagName('head')[0].appendChild(style);
+
 </script> 
 {% endblock script %}
