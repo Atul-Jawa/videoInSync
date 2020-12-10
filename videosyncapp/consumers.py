@@ -87,15 +87,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.latencytime = (recievetime - self.sendtime)/2
             print(self.user.username)
             print(self.latencytime/10**9)
+        elif msgtype == 'Selectedvideo':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'Selectedvideo',
+                    'user': self.user.username,
+                }
+            )
 
-    async def chat_message(self, event):
+    async def Selectedvideo(self, event):
         user = event['user']
-        message = event['message']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'type':"msg",
-            'message': message,
+            'type':"Selectedvideo",
             'user': user,
+        }))
+    async def changedtime(self, event):
+        user = event['user']
+        videotime = event['videotime']
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'type':"changedtime",
+            'user': user,
+            'videotime':videotime
         }))
     async def changedtime(self, event):
         user = event['user']

@@ -55,6 +55,7 @@
 .slide-in-down {
   transform: translateY(-100%) translateX(-50%);
 }
+
 </style>
 {% endblock link %}
 {% block content %}
@@ -165,15 +166,14 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="{% static 'js/video-player.js' %}"></script>
 <script>  
-   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
   var ws_path = ws_scheme + '://' + window.location.host + ":8001/ws/videosyncapp/" + {{ grpcode }} + '/'; // PRODUCTION
   //var ws_path = ws_scheme + '://' + window.location.host + "";
   // console.log("Connecting to " + ws_path);
   var chatSocket = new WebSocket(ws_path);
 
-
     chatSocket.onclose = function (e) {
-       render('danger',user + " Left :(");
+       render('danger',"{{ user.username }}" + " Left :(");
         console.error('Chat socket closed unexpectedly');
     };
 
@@ -269,6 +269,9 @@ var render;
       var fileURL = URL.createObjectURL(file)
       //videoNode.src = fileURL
       videoNode.innerHTML = '<source src="'+ fileURL +'" type="video/mp4">';
+      chatSocket.send(JSON.stringify({
+          'type':'Selectedvideo',
+      }));
     }
 
 
@@ -301,8 +304,7 @@ var render;
         return false;
       }
       chatSocket.send(JSON.stringify({
-          'type':'msg',
-          'message': msg,
+          'type':'latency',
           'user' : '{{user.username}}',
       }));
       /*generate_message(msg, 'self');
@@ -359,7 +361,12 @@ var render;
           var user = data['user']
           render('danger',user + " left :(");
         }
+        else if(type === "Selectedvideo") {
+          var user = data['user']
+          render('info',user + " Selected the video.");
+        }
     }
+    
     function generate_message(msg, type, username="") {
       INDEX++;
       var str="";
@@ -401,7 +408,6 @@ var render;
     })
     
   })
-  
   function makeurl(tempurl){
     var url = "url('";
     url     += tempurl;
@@ -430,7 +436,10 @@ var render;
   stylehtml += '.controls button[data-state="pause"] { background-image:';
   stylehtml += pauseUrl
   stylehtml += '; }';
-  
+
+
+  /*$(".controls button[data-state='pause']").css("background-image",pauseUrl);*/
+
   {% static "img/logos/stopbutton.png" as stopUrl %}
   var stopUrl =  "{{ stopUrl }}";
   stopUrl = makeurl(stopUrl)
