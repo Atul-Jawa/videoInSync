@@ -56,31 +56,40 @@
   transform: translateY(-100%) translateX(-50%);
 }
 .controls button[data-state="play"] {
-  background-image: url('{% static "img/logos/playbutton.png" %}');
+  {% static "img/logos/playbutton.png" as playUrl %}
+  background-image: url('{{ playUrl|to_and }}');
 }
 .controls button[data-state="pause"] {
-  background-image: url('{% static "img/logos/pausebutton.png" %}');
+  {% static "img/logos/pausebutton.png" as pauseUrl %}
+  background-image: url('{{ pauseUrl|to_and }}');
 }
 .controls button[data-state="stop"] {
-  background-image: url('{% static "img/logos/stopbutton.png" %}');
+  {% static "img/logos/stopbutton.png" as stopUrl %}
+  background-image: url('{{ stopUrl|to_and }}');
 }
 .controls button[data-state="mute"] {
-  background-image: url('{% static "img/logos/unmuteicon.png" %}'); 
+  {% static "img/logos/unmuteicon.png" as unmuteUrl %}
+  background-image: url('{{ unmuteUrl|to_and }}');
 }
 .controls button[data-state="unmute"] {
-  background-image: url('{% static "img/logos/muteicon.png" %}'); 
+  {% static "img/logos/muteicon.png" as muteUrl %}
+  background-image: url('{{ muteUrl|to_and }}');
 }
 .controls button[data-state="volup"] {
-  background-image: url('{% static "img/logos/volupicon.png" %}');  
+  {% static "img/logos/volupicon.png" as volupUrl %}
+  background-image: url('{{ volupUrl|to_and }}');
 }
 .controls button[data-state="voldown"] {
-  background-image: url('{% static "img/logos/voldown.png" %}');  
+  {% static "img/logos/voldown.png" as voldownUrl %}
+  background-image: url('{{ voldownUrl|to_and }}');
 }
 .controls button[data-state="go-fullscreen"] {
-  background-image: url('{% static "img/logos/fullscreen.png" %}'); 
+  {% static "img/logos/fullscreen.png" as fullscreenUrl %}
+  background-image: url('{{ fullscreenUrl|to_and }}');
 }
 .controls button[data-state="cancel-fullscreen"] {
-  background-image: url('{% static "img/logos/fullscreenexit.png" %}'); 
+  {% static "img/logos/fullscreenexit.png" as fullscreenexitUrl %}
+  background-image: url('{{ fullscreenexitUrl|to_and }}');
 }
 </style>
 {% endblock link %}
