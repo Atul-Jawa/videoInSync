@@ -99,7 +99,7 @@
 <figure id="videoContainer" data-fullscreen="false">
   <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata" >
     {% if link %}
-      <source src="{{ link }}" type="video/mp4">
+      <source src="{{ link }}" type="video/mp4" muted="muted">
     {% endif %}
   </video>
   <div id="video-controls" class="controls" data-state="hidden">
@@ -262,7 +262,7 @@ var render;
   
       var fileURL = URL.createObjectURL(file)
       //videoNode.src = fileURL
-      videoNode.innerHTML = '<source src="'+ fileURL +'" type="video/mp4">';
+      videoNode.innerHTML = '<source src="'+ fileURL +'" type="video/mp4" muted="muted">';
       chatSocket.send(JSON.stringify({
           'type':'Selectedvideo',
       }));
