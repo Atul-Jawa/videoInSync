@@ -34,6 +34,14 @@
                             </div>
                             <p class="text-danger pl-4">{{ form.group_name.errors.as_text }}</p>
                         </div>
+                        {% if link %}
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="text-black" for="title">Link </label> 
+                                    {{ form.link }} 
+                                </div>
+                            </div>
+                        {% endif %}
                         <div class="row form-group">
                             <div id="cf-submit" class="col-md-12">
                                 <input type="submit" value="Create" id="contact-submit" class="btn btn-transparent" class="btn btn-primary btn-md text-white">
@@ -45,5 +53,5 @@
                 </div>
             </div>
         </div> <!-- end row -->
-    </div> <!-- end container -->		
+    </div> <!-- end container -->       
 {% endblock content %}

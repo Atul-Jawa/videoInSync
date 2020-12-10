@@ -5,5 +5,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('creategrp/', views.creategrp, name='creategrp'),
     path('joingrp/', views.joingrp, name='joingrp'),
+    path('creategrpgdrive/', views.creategrpgdrive, name='creategrpgdrive'),
     re_path(r'watchtogether/(?P<pk>\d+)/$', views.watchtogether, name='watchtogether')
 ]

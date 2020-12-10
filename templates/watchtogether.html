@@ -98,6 +98,9 @@
 
 <figure id="videoContainer" data-fullscreen="false">
   <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata" >
+    {% if link %}
+      <source src="{{ link }}" type="video/mp4">
+    {% endif %}
   </video>
   <div id="video-controls" class="controls" data-state="hidden">
     <button id="playpause" type="button" data-state="play">Play/Pause</button>
@@ -154,10 +157,8 @@
       <input id="uploadsubtitles" type="file" style="display:none">
   </div>
   <span class="bg-success p-2 text-white">Code to join Group: <span class="font-weight-bold text-white">{{ grpcode }}</span></span>
-  <!--<button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
-    <button id="myBtn" onclick="myFunction()">Play</button>-->
+  <!--<button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>-->
   
-    
 </div>
 {% endblock content %}
 {% block script %} 
@@ -234,16 +235,9 @@ var render;
 
 })();
 
-
-
-
-
-
-
-  var btn = document.getElementById("myBtn");
-      video.addEventListener('loadedmetadata', function() {
-      this.currentTime = 5;
-      }, false);
+  video.addEventListener('loadedmetadata', function() {
+  this.currentTime = 5;
+  }, false);
   (function localFileVideoPlayer() {
     'use strict'
     var URL = window.URL || window.webkitURL
@@ -492,6 +486,5 @@ var render;
 
   style.innerHTML = stylehtml;
   document.getElementsByTagName('head')[0].appendChild(style);
-
 </script> 
 {% endblock script %}
