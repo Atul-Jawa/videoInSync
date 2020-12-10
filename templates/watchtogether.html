@@ -97,9 +97,9 @@
   </div>
 
 <figure id="videoContainer" data-fullscreen="false">
-  <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata" muted="muted">
+  <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata"  muted="muted">
     {% if link %}
-      <source src="{{ link }}" type="video/mp4" >
+      <source src="{{ link }}" type="video/mp4">
     {% endif %}
   </video>
   <div id="video-controls" class="controls" data-state="hidden">
@@ -328,6 +328,7 @@ var render;
         else if(type === "changedtime" ){
           console.log("changedtime")
           video.play();
+          video.muted = false;
           var videotime = data['videotime']
           video.currentTime = videotime;
           render('info',user + " changed Video playing time :( to " + videotime );
@@ -335,6 +336,7 @@ var render;
         else if(type === "played" ){
           console.log("played")
           video.play();
+          video.muted = false;
           render('info',user + " Played the Video :)");
         }
         else if(type === "paused") {
