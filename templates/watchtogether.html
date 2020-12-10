@@ -55,6 +55,33 @@
 .slide-in-down {
   transform: translateY(-100%) translateX(-50%);
 }
+.controls button[data-state="play"] {
+  background-image: url('{% static "img/logos/playbutton.png" %}');
+}
+.controls button[data-state="pause"] {
+  background-image: url('{% static "img/logos/pausebutton.png" %}');
+}
+.controls button[data-state="stop"] {
+  background-image: url('{% static "img/logos/stopbutton.png" %}');
+}
+.controls button[data-state="mute"] {
+  background-image: url('{% static "img/logos/unmuteicon.png" %}'); 
+}
+.controls button[data-state="unmute"] {
+  background-image: url('{% static "img/logos/muteicon.png" %}'); 
+}
+.controls button[data-state="volup"] {
+  background-image: url('{% static "img/logos/volupicon.png" %}');  
+}
+.controls button[data-state="voldown"] {
+  background-image: url('{% static "img/logos/voldown.png" %}');  
+}
+.controls button[data-state="go-fullscreen"] {
+  background-image: url('{% static "img/logos/fullscreen.png" %}'); 
+}
+.controls button[data-state="cancel-fullscreen"] {
+  background-image: url('{% static "img/logos/fullscreenexit.png" %}'); 
+}
 </style>
 {% endblock link %}
 {% block content %}
@@ -101,7 +128,7 @@
   <div id="video-controls" class="controls" data-state="hidden">
     <button id="playpause" type="button" data-state="play">Play/Pause</button>
     <button id="stop" type="button" data-state="stop">Stop</button>
-    <div class="progress">
+    <div class="progress" style="margin-top:20px; height:10px; opacity: 0.9;">
       <progress id="progress" value="0" min="0">
       <span id="progress-bar"></span>
       </progress>
@@ -141,18 +168,18 @@
   <div class="msg animate slide-in-down"></div>
 </figure>
 <div class="content">
-  <div id="message"></div>
-   <div class="row">
+  <div class="row">
     <div class="col-4">
+      <div id="message"></div>
       <button style="display:block;" onclick="document.getElementById('uploadvideo').click()">Select Video</button>
       <input id="uploadvideo" type="file" accept="video/*" style="display:none"/>
     </div>
     <div class="col-4">
+      <div id="message2"></div>
       <button style="display:block;" onclick="document.getElementById('uploadsubtitles').click()">Select subtitles (.vvt)</button>
       <input id="uploadsubtitles" type="file" style="display:none">
-    </div>
-    <span class="bg-success p-2 text-white">Code to join Group: <span class="font-weight-bold text-white">{{ grpcode }}</span></span>
   </div>
+  <span class="bg-success p-2 text-white">Code to join Group: <span class="font-weight-bold text-white">{{ grpcode }}</span></span>
   <!--<button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
     <button id="myBtn" onclick="myFunction()">Play</button>-->
   
@@ -165,13 +192,14 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="{% static 'js/video-player.js' %}"></script>
 <script>  
-  var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
   var ws_path = ws_scheme + '://' + window.location.host + ":8001/ws/videosyncapp/" + {{ grpcode }} + '/'; // PRODUCTION
   //var ws_path = ws_scheme + '://' + window.location.host + "";
   // console.log("Connecting to " + ws_path);
   var chatSocket = new WebSocket(ws_path);
 
-  chatSocket.onclose = function (e) {
+
+    chatSocket.onclose = function (e) {
        render('danger',user + " Left :(");
         console.error('Chat socket closed unexpectedly');
     };
@@ -244,7 +272,7 @@ var render;
       this.currentTime = 5;
       }, false);
   (function localFileVideoPlayer() {
-  	'use strict'
+    'use strict'
     var URL = window.URL || window.webkitURL
     var displayMessage = function (message, isError) {
       var element = document.querySelector('#message')
@@ -278,7 +306,11 @@ var render;
         var videoNode = $("#video")
         var fileURL = URL.createObjectURL(file)
         var subtitlesfile = '<track label="English" kind="subtitles" srclang="en" src="' + fileURL + '" default>';
+
         videoNode.append(subtitlesfile);
+        var element = document.querySelector('#message2')
+        element.innerHTML = "<span class='text-success' >Subtitles Uploaded!</span> Change using cc to view"
+
         vidply();
     }
     var inputNode = document.getElementById('uploadvideo')
@@ -325,14 +357,14 @@ var render;
         }
         else if(type === "changedtime" ){
           console.log("changedtime")
-					video.play();
+          video.play();
           var videotime = data['videotime']
           video.currentTime = videotime;
           render('info',user + " changed Video playing time :( to " + videotime );
         }
         else if(type === "played" ){
           console.log("played")
-					video.play();
+          video.play();
           render('info',user + " Played the Video :)");
         }
         else if(type === "paused") {
