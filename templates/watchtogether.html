@@ -97,7 +97,7 @@
   </div>
 
 <figure id="videoContainer" data-fullscreen="false">
-  <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata"  muted="muted">
+  <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata" {% if link %}muted{% endif %}>
     {% if link %}
       <source src="{{ link }}" type="video/mp4">
     {% endif %}
@@ -110,7 +110,7 @@
       <span id="progress-bar"></span>
       </progress>
     </div>
-    <button id="mute" type="button" data-state="mute">Mute/Unmute</button>
+    <button id="mute" type="button" data-state={% if link %}"unmute"{% else %} "mute" {% endif %}>Mute/Unmute</button>
     <button id="volinc" type="button" data-state="volup">Vol+</button>
     <button id="voldec" type="button" data-state="voldown">Vol-</button>
     <button id="fs" type="button" data-state="go-fullscreen">Fullscreen</button>
@@ -148,8 +148,13 @@
   <div class="row">
     <div class="col-4">
       <div id="message"></div>
+      {% if link %}
+      <div><span class="text-success">Unmute to Enjoy!!</span></div>
+      {% else %}
       <button style="display:block;" onclick="document.getElementById('uploadvideo').click()">Select Video</button>
+      {% endif %}
       <input id="uploadvideo" type="file" accept="video/*" style="display:none"/>
+
     </div>
     <div class="col-4">
       <div id="message2"></div>
@@ -328,7 +333,6 @@ var render;
         else if(type === "changedtime" ){
           console.log("changedtime")
           video.play();
-          video.muted = false;
           var videotime = data['videotime']
           video.currentTime = videotime;
           render('info',user + " changed Video playing time :( to " + videotime );
@@ -336,7 +340,6 @@ var render;
         else if(type === "played" ){
           console.log("played")
           video.play();
-          video.muted = false;
           render('info',user + " Played the Video :)");
         }
         else if(type === "paused") {
