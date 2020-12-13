@@ -2,8 +2,8 @@
 {% block link %}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.css">
+<link rel="stylesheet" href="{% static 'css/emoji_keyboard.css' %}" />
 <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 <style>
 /* message */
@@ -55,6 +55,26 @@
 .slide-in-down {
   transform: translateY(-100%) translateX(-50%);
 }
+.input-container {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.icon {
+  padding: 10px;
+  background: #444;
+  color: white;
+  min-width: 50px;
+  text-align: center;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  outline: none;
+}
 
 </style>
 {% endblock link %}
@@ -63,8 +83,6 @@
       <div class="row">
         <div class="col-12">
           <nav class="navbar navbar-expand-md navbar-light">
-          
-            
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -99,7 +117,7 @@
 <figure id="videoContainer" data-fullscreen="false">
   <video id="video" controls controlsList="nodownload nofullscreen noremoteplayback" controls preload="metadata" {% if link %}muted{% endif %}>
     {% if link %}
-      <source src="{{ link }}" type="video/mp4">
+      <source src="{% static link %}" type="video/mp4">
     {% endif %}
   </video>
   <div id="video-controls" class="controls" data-state="hidden">
@@ -134,7 +152,11 @@
         </div>
         <div class="chat-input">
         <form>
-            <input type="text" id="chat-input" placeholder="Send a message..."/>
+            <div class="input-container">
+              <i id="test" class="icon far fa-smile"></i>
+              <input type="text" id="chat-input" class="input-field" placeholder="Send a message..."/>
+            </div>
+
             <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
         </form>
         </div>
@@ -170,7 +192,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+<script src="{% static 'js/emoji_keyboard.js' %}"></script>
 <script src="{% static 'js/video-player.js' %}"></script>
+
 <script>  
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
   var ws_path = ws_scheme + '://' + window.location.host + ":8001/ws/videosyncapp/" + {{ grpcode }} + '/'; // PRODUCTION
@@ -492,4 +517,16 @@ var render;
   style.innerHTML = stylehtml;
   document.getElementsByTagName('head')[0].appendChild(style);
 </script> 
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+<script>
+var emojiKeyboard =new EmojiKeyboard;
+emojiKeyboard.instantiate(document.getElementById("test"))
+const output = document.getElementById("chat-input");
+emojiKeyboard.callback = (emoji, closed) => {
+  console.info(emoji, closed)
+  output.value += emoji.emoji;
+};
+
+</script>
 {% endblock script %}
