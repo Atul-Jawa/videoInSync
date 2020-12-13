@@ -355,7 +355,7 @@ class EmojiKeyboard {
         div2.appendChild(div3);
         main_div.appendChild(search_div);
         main_div.appendChild(div2);
-        document.getElementById("videoContainer").appendChild(main_div);;
+        document.getElementById("chatBox").appendChild(main_div);;
     }
 
     // ----- resizes part ----- //
