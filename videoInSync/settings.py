@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "videosyncapp",
-    'accounts'
+    'accounts',
+    'channels_presence',
 ]
 
 MIDDLEWARE = [
